@@ -93,11 +93,12 @@ footer{padding-block:6px 30px}.feedback{min-height:1.5em}
   <details><summary>Кого я увижу в списке?</summary><p>Жора записывает вступления после подключения группы. Существующих участников можно внести вручную на отдельный лист. При повторном вступлении Жора обновляет строку по Telegram ID.</p></details>
   <details><summary>Нужно ли держать компьютер включённым?</summary><p>Google Apps Script проверяет события примерно раз в минуту даже при закрытой таблице. Эта версия Жоры ведёт список и отправляет приветствия. Ответы ИИ и отложенные напоминания в неё не входят.</p></details>
   <details><summary>Почему Жора молчит?</summary><p>Откройте <strong>Жора → Проверить сейчас</strong> и проверьте название группы. Убедитесь, что бот в списке администраторов и ячейка B2 заполнена. Для этой таблицы нужен отдельный бот от BotFather.</p></details>
+  <details><summary>Telegram вернул ошибку 400</summary><p>Проверьте адрес кнопки в B4. Нужна полная ссылка, например <code>https://t.me/telegram</code>. Адрес <code>https://test</code> не подходит. Чтобы проверить отправку только текста, очистите B3 и B4 и нажмите <strong>Жора → Отправить тестовое приветствие</strong>. Обновлённый скрипт покажет пояснение Telegram, если ошибка повторится.</p></details>
   <details><summary>Как остановить Жору?</summary><p>Выберите <strong>Жора → Остановить</strong>. Чтобы возобновить работу, выберите <strong>Жора → Подключить / запустить</strong>.</p></details>
 </section>
 </main>
 <footer class="hint">Мастер готовит скрипт и ссылку прямо в вашей вкладке. Токен вводится в вашей таблице.</footer>
-<script src="source.js?v=4"></script>
+<script src="source.js?v=5"></script>
 <script>
 const welcome = document.querySelector('#welcome');
 const botUsername = document.querySelector('#bot-username');
@@ -136,7 +137,8 @@ function preparedScript() {
 function validButton() {
   const text = buttonText.value.trim();
   const link = buttonUrl.value.trim();
-  return (!text && !link) || (Boolean(text) && /^https:\/\/[a-z0-9.-]+(?::\d+)?(?:[/?#][^\s]*)?$/i.test(link));
+  const publicUrl = /^https:\/\/(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,63}(?::\d+)?(?:[/?#][^\s]*)?$/i;
+  return (!text && !link) || (Boolean(text) && publicUrl.test(link));
 }
 
 function renderPreview() {
@@ -148,7 +150,7 @@ function renderPreview() {
   button.hidden = !welcome.value.trim() || !button.textContent || !validButton();
   document.querySelector('#button-hint').textContent = validButton() ?
     'После подключения подпись можно менять в B3, а ссылку — в B4 листа «Жора · Настройки».' :
-    'Укажите текст кнопки и ссылку, которая начинается с https://, или очистите оба поля.';
+    'Введите текст кнопки и полный адрес, например https://t.me/telegram, или очистите оба поля.';
 }
 async function copy(value, feedback, success) {
   const status = document.querySelector(feedback);
