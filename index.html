@@ -28,6 +28,10 @@ code{background:#edf1ea;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere
 textarea,input{width:100%;padding:10px 12px;border:1px solid #9eaea5;border-radius:9px;font:inherit;color:var(--ink);background:white}
 textarea{min-height:110px;resize:vertical} input{max-width:350px} [hidden]{display:none!important}
 .editor{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}.editor label,.preview-label{display:block;font-weight:690;margin-bottom:6px}
+.button-settings{display:grid;gap:8px;margin-top:14px}
+.button-settings label{margin:0}
+.preview-button{margin-top:8px;text-align:center;background:var(--light);color:var(--green);padding:9px;border-radius:9px;overflow-wrap:anywhere;font-weight:650}
+.warning{margin-top:12px;padding:12px 14px;border-left:3px solid var(--green);background:var(--light)}
 details{border-top:1px solid var(--line);padding:12px 0}summary{cursor:pointer;font-weight:650}details p{margin-top:7px}
 footer{padding-block:6px 30px}.feedback{min-height:1.5em}
 @media(max-width:680px){.hero,.editor{grid-template-columns:1fr}main,header,footer{padding-inline:16px}.steps li,.panel{padding:17px}.steps li{grid-template-columns:27px minmax(0,1fr)}}
@@ -48,13 +52,15 @@ footer{padding-block:6px 30px}.feedback{min-height:1.5em}
 <section aria-labelledby="steps">
   <h2 id="steps">Четыре шага настройки</h2>
   <ol class="steps">
-    <li><span class="number">01</span><div><h3>Создайте своего бота</h3><p>В <a href="https://t.me/BotFather" target="_blank" rel="noopener">@BotFather</a> отправьте <code>/newbot</code> и сохраните полученный токен для шага 3. Сюда введите только <code>@имя</code> бота, чтобы мастер подготовил ссылку для группы.</p><p><label for="bot-username">Имя бота в Telegram</label><br><input id="bot-username" placeholder="@my_zhora_bot" autocomplete="off" autocapitalize="none" spellcheck="false"></p></div></li>
-    <li><span class="number">02</span><div><h3>Вставьте готовый скрипт в свою таблицу</h3><p>При желании <a href="#welcome-title">задайте текст приветствия</a> прямо здесь. Затем на компьютере откройте <a href="https://sheets.new" target="_blank" rel="noopener">новую Google Таблицу</a> → <strong>Расширения → Apps Script</strong>. Замените весь код в редакторе скриптом с этой страницы и нажмите <strong>Сохранить</strong>. Оставьте вкладку мастера открытой до конца настройки.</p>
+    <li><span class="number">01</span><div><h3>Создайте своего бота</h3><p>В <a href="https://t.me/BotFather" target="_blank" rel="noopener">@BotFather</a> отправьте <code>/newbot</code>. BotFather попросит имя, которое люди увидят в чате, и уникальный <code>@юзернейм</code> для ссылки. Сохраните полученный токен для шага 3.</p><p><label for="bot-username">@Юзернейм бота</label><br><input id="bot-username" placeholder="@my_zhora_bot" autocomplete="off" autocapitalize="none" spellcheck="false"></p><p><label for="bot-name">Своё имя для бота (по желанию)</label><br><input id="bot-name" maxlength="64" placeholder="Например, Лисёнок"></p><p class="hint">Мастер применит это имя при первом подключении. Если поле пустое, останется имя, выбранное в BotFather. У уже подключённого бота имя меняется через <code>/setname</code> в BotFather. Меню в таблице называется «Жора».</p></div></li>
+    <li><span class="number">02</span><div><h3>Вставьте готовый скрипт в свою таблицу</h3><p>При желании <a href="#welcome-title">настройте приветствие и кнопку</a> на этой странице. Затем на компьютере откройте <a href="https://sheets.new" target="_blank" rel="noopener">новую Google Таблицу</a> и выберите <strong>Расширения → Apps Script</strong>.</p><p>Скопируйте скрипт кнопкой ниже. Слева в редакторе откройте <strong>Code.gs</strong>, выделите весь код, вставьте скопированный и нажмите <strong>Сохранить</strong>. Оставьте вкладку мастера открытой. Если Жора уже подключён, см. <a href="#update-script">как обновить скрипт</a>.</p>
       <div class="actions"><button type="button" id="copy-script">Скопировать скрипт</button><button type="button" class="secondary" id="download-script">Скачать Code.gs</button></div><p class="hint feedback" id="script-feedback" role="status"></p></div></li>
-    <li><span class="number">03</span><div><h3>Введите токен в меню «Жора»</h3><p>Вернитесь в таблицу и обновите страницу. Выберите <strong>Жора → Подключить / запустить</strong>. При первом запуске Google попросит выбрать аккаунт и дать разрешения. После этого снова выберите этот пункт, если окно ввода токена не открылось.</p><p>Вставьте токен из BotFather и нажмите <strong>ОК</strong>.</p><p class="hint">Вставляйте токен только в окно внутри своей таблицы. Редакторы таблицы могут получить доступ к скрипту и токену.</p></div></li>
+    <li><span class="number">03</span><div><h3>Запустите Жору из таблицы</h3><p>Вернитесь на вкладку Google Таблицы и обновите страницу. Ячейки пока будут выглядеть как раньше. В верхней строке меню, рядом с «Справка», появится <strong>Жора</strong>. Откройте <strong>Жора → Подключить / запустить</strong>.</p>
+    <div class="warning"><strong>Первый запуск и разрешения Google</strong><p>Выберите свой Google-аккаунт. Если увидите «Эксперты Google не проверяли это приложение», проверьте, что открыли свой проект со скриптом из мастера. Для своего проекта нажмите <strong>Дополнительные настройки → Перейти на страницу «Проект без названия» (небезопасно)</strong>. Если вы переименовали проект, Google покажет его название.</p><p>На экране разрешений нажмите <strong>Выбрать все</strong>, прокрутите вниз и нажмите <strong>Продолжить</strong> или <strong>Разрешить</strong>. Затем вернитесь в таблицу и снова выберите <strong>Жора → Подключить / запустить</strong>, если окно для токена не открылось.</p></div>
+    <p>Вставьте токен из BotFather и нажмите <strong>ОК</strong>. Жора создаст лист «Жора · Настройки». Если в новой таблице был только пустой «Лист1», он станет листом «Жора · Участники».</p><p class="hint">Вставляйте токен только в окно внутри своей таблицы. Редакторы таблицы могут получить доступ к скрипту и токену.</p></div></li>
     <li><span class="number">04</span><div><h3>Добавьте Жору в группу администратором</h3><p>После ввода токена вернитесь сюда, нажмите кнопку и выберите свою группу в Telegram. Подтвердите добавление бота администратором. Это нужно, чтобы он узнавал о вступлении участников.</p><div class="actions"><a class="button" id="connect-group" target="_blank" rel="noopener noreferrer" hidden>Добавить в группу и подключить</a></div><p class="hint" id="group-hint">Укажите @имя бота на первом шаге и скопируйте или скачайте скрипт.</p><p>В таблице выберите <strong>Жора → Проверить сейчас</strong>. Когда увидите название группы, нажмите <strong>Жора → Отправить тестовое приветствие</strong>.</p>
     <details><summary>Если ссылка не подключила группу</summary><p>В настройках группы откройте <strong>Администраторы → Добавить администратора</strong> и выберите своего бота. Затем откройте <strong>Жора → Команда подключения</strong> в таблице и отправьте показанную команду в группу. В таблице снова нажмите <strong>Проверить сейчас</strong>.</p></details>
-    <p class="hint">Для полной проверки попросите нового участника вступить в группу. Проверьте приветствие в чате и строку на листе «Жора · Участники».</p></div></li>
+    <p class="hint">Чтобы Жора видел, кто вступил, ему достаточно быть администратором именно этой группы. Отключать режим приватности в BotFather не нужно. Для проверки попросите человека, которого ещё нет в группе, вступить. Проверьте приветствие в чате и строку на листе «Жора · Участники».</p></div></li>
   </ol>
 </section>
 <section class="panel" aria-labelledby="welcome-title">
@@ -65,10 +71,22 @@ footer{padding-block:6px 30px}.feedback{min-height:1.5em}
 
 Расскажи немного о себе с тегом #знакомство.</textarea>
       <p class="hint">Вместо <code>{имя}</code> Жора подставит имя новичка.</p>
+      <div class="button-settings">
+        <label for="button-text">Текст кнопки под сообщением (по желанию)</label>
+        <input id="button-text" maxlength="64" placeholder="Правила группы">
+        <label for="button-url">Ссылка кнопки</label>
+        <input id="button-url" type="url" placeholder="https://example.com/pravila">
+        <p class="hint" id="button-hint" role="status">Заполните оба поля. После подключения их можно менять в B3 и B4 листа «Жора · Настройки».</p>
+      </div>
       <div class="actions"><button type="button" id="copy-welcome">Скопировать текст</button></div>
       <p class="hint feedback" id="welcome-feedback" role="status">Текст попадёт в готовый скрипт. После подключения его можно менять в B2 листа «Жора · Настройки».</p></div>
-    <div><p class="preview-label">Как это выглядит в чате</p><div class="bubble" id="preview"></div></div>
+    <div><p class="preview-label">Как это выглядит в чате</p><div class="bubble"><strong id="preview-name">Жора</strong><p id="preview"></p></div><p id="preview-button" class="preview-button" hidden></p></div>
   </div>
+</section>
+<section class="panel" aria-labelledby="update-script">
+  <h2 id="update-script">Как обновить скрипт в подключённой таблице</h2>
+  <p>Откройте ту же таблицу → <strong>Расширения → Apps Script → Code.gs</strong>. Скопируйте новый скрипт с этой страницы и замените им весь старый код в <code>Code.gs</code>. Нажмите <strong>Сохранить</strong>, вернитесь в таблицу, обновите страницу и выберите <strong>Жора → Подключить / запустить</strong>.</p>
+  <p>Токен, привязанная группа и список участников сохранятся. Для кнопки впишите подпись в <strong>B3</strong> и ссылку с <code>https://</code> в <strong>B4</strong> листа «Жора · Настройки». Проверьте её через «Отправить тестовое приветствие». Если в старой таблице остался пустой «Лист1», его можно удалить через меню листа.</p>
 </section>
 <section class="panel">
   <h2>Что важно знать</h2>
@@ -79,10 +97,13 @@ footer{padding-block:6px 30px}.feedback{min-height:1.5em}
 </section>
 </main>
 <footer class="hint">Мастер готовит скрипт и ссылку прямо в вашей вкладке. Токен вводится в вашей таблице.</footer>
-<script src="source.js?v=3"></script>
+<script src="source.js?v=4"></script>
 <script>
 const welcome = document.querySelector('#welcome');
 const botUsername = document.querySelector('#bot-username');
+const botName = document.querySelector('#bot-name');
+const buttonText = document.querySelector('#button-text');
+const buttonUrl = document.querySelector('#button-url');
 const groupLink = document.querySelector('#connect-group');
 const setupCode = Array.from(crypto.getRandomValues(new Uint8Array(16)), value => value.toString(16).padStart(2, '0')).join('');
 let scriptPrepared = false;
@@ -98,16 +119,36 @@ function updateGroupLink() {
 }
 
 function preparedScript() {
+  if (!validButton()) {
+    document.querySelector('#script-feedback').textContent = 'Проверьте текст и ссылку кнопки в редакторе приветствия.';
+    return null;
+  }
   scriptPrepared = true;
   updateGroupLink();
-  return zhoraSource
-    .replace(/^const SETUP_CODE = .*;$/m, () => 'const SETUP_CODE = ' + JSON.stringify(setupCode) + ';')
-    .replace(/^const DEFAULT_WELCOME = .*;$/m, () => 'const DEFAULT_WELCOME = ' + JSON.stringify(welcome.value) + ';');
+  const values = {
+    SETUP_CODE: setupCode, DEFAULT_BOT_NAME: botName.value.trim(), DEFAULT_WELCOME: welcome.value,
+    DEFAULT_BUTTON_TEXT: buttonText.value.trim(), DEFAULT_BUTTON_URL: buttonUrl.value.trim(),
+  };
+  return zhoraSource.replace(/^const (SETUP_CODE|DEFAULT_BOT_NAME|DEFAULT_WELCOME|DEFAULT_BUTTON_TEXT|DEFAULT_BUTTON_URL) = .*;$/gm,
+    (_, name) => 'const ' + name + ' = ' + JSON.stringify(values[name]) + ';');
+}
+
+function validButton() {
+  const text = buttonText.value.trim();
+  const link = buttonUrl.value.trim();
+  return (!text && !link) || (Boolean(text) && /^https:\/\/[a-z0-9.-]+(?::\d+)?(?:[/?#][^\s]*)?$/i.test(link));
 }
 
 function renderPreview() {
   document.querySelector('#preview').textContent =
     welcome.value.split('{имя}').join('Аня') || 'Приветствие выключено';
+  document.querySelector('#preview-name').textContent = botName.value.trim() || 'Жора';
+  const button = document.querySelector('#preview-button');
+  button.textContent = buttonText.value.trim();
+  button.hidden = !welcome.value.trim() || !button.textContent || !validButton();
+  document.querySelector('#button-hint').textContent = validButton() ?
+    'После подключения подпись можно менять в B3, а ссылку — в B4 листа «Жора · Настройки».' :
+    'Укажите текст кнопки и ссылку, которая начинается с https://, или очистите оба поля.';
 }
 async function copy(value, feedback, success) {
   const status = document.querySelector(feedback);
@@ -125,16 +166,19 @@ async function copy(value, feedback, success) {
     field.select();
   }
 }
-welcome.addEventListener('input', renderPreview);
+[welcome, botName, buttonText, buttonUrl].forEach(field => field.addEventListener('input', renderPreview));
 botUsername.addEventListener('input', updateGroupLink);
 document.querySelector('#copy-script').addEventListener('click', () => {
-  copy(preparedScript(), '#script-feedback', 'Скрипт скопирован. Вставьте его в Code.gs.');
+  const script = preparedScript();
+  if (script) copy(script, '#script-feedback', 'Скрипт скопирован. Вставьте его в Code.gs.');
 });
 document.querySelector('#copy-welcome').addEventListener('click', () => {
   copy(welcome.value, '#welcome-feedback', 'Скопировано. Откройте B2 двойным щелчком и вставьте текст внутрь ячейки.');
 });
 document.querySelector('#download-script').addEventListener('click', () => {
-  const url = URL.createObjectURL(new Blob([preparedScript()], {type:'text/plain;charset=utf-8'}));
+  const script = preparedScript();
+  if (!script) return;
+  const url = URL.createObjectURL(new Blob([script], {type:'text/plain;charset=utf-8'}));
   const link = document.createElement('a');
   link.href = url;
   link.download = 'Code.gs';
